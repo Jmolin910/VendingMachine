@@ -1,0 +1,20 @@
+package Vendingmachine;
+
+public class VendingMachine {
+    public static void main(String[] args){
+
+        String [] snacks = {"Lays", "Red Doritos", "Blue Doritos", "Frito's", "Pretzels", "Popcorn", "Chocolate", "Reese's"};
+        double [] price = {2.00, 2.00, 2.00, 2.00, 2.00, 3.00, 3.00, 3.00};
+
+        system.out.println("Welcome! Please pick a snack:");
+        for (int i = 0; i < snacks.length; i++) {
+            System.out.println(snacks[i]);
+         }
+    
+    }
+
+    @Override
+    public String toString() {
+        return "VendingMachine []";
+    }
+}
