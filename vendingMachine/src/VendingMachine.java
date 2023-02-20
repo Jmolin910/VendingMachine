@@ -11,7 +11,7 @@ public class VendingMachine {
         String selectedSnack = "";
         String outputMessage = "";
 
-        int cost;
+        int cost = 0;
         int amountEntered = -1;
 
         System.out.println("Welcome!");
@@ -20,6 +20,19 @@ public class VendingMachine {
         }
         System.out.println("Enter a snack:");
         selectedSnack = snackScanner.nextLine();
+
+        int isAvailable = 0;
+        for (int snack = 0; snack < snacks.length; snack++) {
+            if (snacks[snack].equals(selectedSnack)) {
+                isAvailable++;
+                break;
+            }
+        }
+        
+        if (isAvailable == 0){
+            System.out.println("Please enter something i offered.");
+            return;
+        }
 
         if (selectedSnack.equals("Lays")){
             System.out.println(price[0] + " dollars please.");
@@ -65,6 +78,7 @@ public class VendingMachine {
         while(amountEntered <= 1){
             try{
                 amountEntered = snackScanner.nextInt();
+                if(amountEntered < cost){ System.out.println("Please enter enough money if you want " + selectedSnack + ".");}
                 if(amountEntered < 0){ System.out.println("What do you think that means I'd pay you? Try again.");}
                 else if(amountEntered == 0){System.out.println("This a vending machine which means I need money. Try again.");}
             }
