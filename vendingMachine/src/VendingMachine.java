@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class VendingMachine {
     public static void main(String[] args){
 
+        // instance variables
         String [] snacks = {"Lays", "Red Doritos", "Blue Doritos", "Frito's", "Pretzels", "Popcorn", "Chocolate", "Reese's"};
         int [] price = {2, 2, 2, 2, 2, 3, 3, 3};
 
@@ -10,18 +11,21 @@ public class VendingMachine {
 
         String selectedSnack = "";
         String outputMessage = "";
+        String proceed = "";
 
         int cost = 0;
-        int amountEntered = -1;
+        int amountEntered = 0;
+        int totalEntered = 0;
+        int isAvailable = 0;
 
-        System.out.println("Welcome!");
+        // intro
+        System.out.println("Welcome! I have these snacks:");
         for (int i = 0; i < snacks.length; i++) {
             System.out.println(snacks[i]);
         }
-        System.out.println("Enter a snack:");
+        System.out.println("Enter desired snack:");
         selectedSnack = snackScanner.nextLine();
 
-        int isAvailable = 0;
         for (int snack = 0; snack < snacks.length; snack++) {
             if (snacks[snack].equals(selectedSnack)) {
                 isAvailable++;
@@ -29,11 +33,13 @@ public class VendingMachine {
             }
         }
         
+        // checks if snack entered is in list
         if (isAvailable == 0){
-            System.out.println("Please enter something i offered.");
+            System.out.println("Please enter something I offered.");
             return;
         }
 
+        // cases for each snack -- sets the cost and output message to associated snack
         if (selectedSnack.equals("Lays")){
             System.out.println(price[0] + " dollars please.");
             cost = price[0];
@@ -75,19 +81,40 @@ public class VendingMachine {
             outputMessage += "Here are your Reese's. Reesepectful choice.";
         }
 
-        while(amountEntered <= 1){
+        System.out.println("Enter money:");
+
+        // loop for money insertion
+        while(totalEntered < cost){
             try{
                 amountEntered = snackScanner.nextInt();
-                if(amountEntered < cost){ System.out.println("Please enter enough money if you want " + selectedSnack + ".");}
-                if(amountEntered < 0){ System.out.println("What do you think that means I'd pay you? Try again.");}
-                else if(amountEntered == 0){System.out.println("This a vending machine which means I need money. Try again.");}
+                if(amountEntered < 0){ System.out.println("What do you think that means I'd pay you? Try again.");} // if negative entered
+                else if(amountEntered == 0){System.out.println("This a vending machine which means I need money. Try again.");} // if zero entered
+                else if(amountEntered + totalEntered < cost){  // if not enough entered
+                    System.out.println("Please enter enough money if you want " + selectedSnack + ".");
+                    totalEntered += amountEntered;
+                }
+                else if(amountEntered + totalEntered >= cost){totalEntered += amountEntered;} // if at least enough entered
             }
-            catch(Exception e){
-                System.out.println("I'm allergic to money that isn't in 1 dollar increments. Try again.");
+            catch(Exception e){ // if anything else besides a positive integer is entered
+                System.out.println("I'm allergic to anything that isn't money in 1 dollar increments. Try again.");
                 snackScanner.next();
             }
         }
 
-        System.out.println(outputMessage);
+        // confirms purchase
+        System.out.println("Continue purchase?");
+        while(!proceed.equalsIgnoreCase("Yes") && !proceed.equalsIgnoreCase("No")){
+            proceed = snackScanner.nextLine();
+            if(proceed.equalsIgnoreCase("No")){System.out.println("Here are your " + totalEntered + " dollars back.");} // if want to cancel
+            else if(proceed.equalsIgnoreCase("Yes")){ // if want to proceed
+                if(totalEntered > cost){ // if change needed
+                    if(totalEntered - cost == 1){System.out.println("Here's your dollar of change.");}
+                    else{System.out.println("Here's your " + (totalEntered - cost) + " dollars of change.");}
+                }
+                System.out.println(outputMessage); // dispenses snack
+
+            } 
+            else{System.out.println("Enter yes or no:");} // if insufficient answer
+        }
     }
 }
